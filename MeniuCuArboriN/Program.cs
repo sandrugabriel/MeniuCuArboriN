@@ -22,7 +22,7 @@ namespace MeniuCuArboriN
 
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new MockupMeniu());
+            Application.Run(new Form1());
         }
 
 

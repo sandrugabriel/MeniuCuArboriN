@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MeniuCuArboriN.View.Panels;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -15,6 +16,14 @@ namespace MeniuCuArboriN
         public Form1()
         {
             InitializeComponent();
+
+            this.Controls.Add(new PnlMeniu(this));
+
+        }
+
+        private void button7_Click(object sender, EventArgs e)
+        {
+            this.Close();
         }
     }
 }

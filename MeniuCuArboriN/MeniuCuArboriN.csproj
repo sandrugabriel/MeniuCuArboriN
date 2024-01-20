@@ -228,6 +228,9 @@
     <Compile Include="View\Mockups\MockupMeniu.Designer.cs">
       <DependentUpon>MockupMeniu.cs</DependentUpon>
     </Compile>
+    <Compile Include="View\Panels\PnlMeniu.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
     </EmbeddedResource>
@@ -258,9 +261,7 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="View\Panels\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <None Include="Resources\down.png" />
   </ItemGroup>
