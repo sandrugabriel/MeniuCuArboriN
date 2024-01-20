@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace MeniuCuArboriN.ArboriN
 {
-    public class TreeNodeN<T> : IComparable<TreeNodeN<T>> where T : IComparable<T>
+    public class TreeNodeN<T>
     {
 
         public List<TreeNodeN<T>> Children { get; set; }
@@ -15,9 +15,5 @@ namespace MeniuCuArboriN.ArboriN
         public T Value { get; set; }
 
 
-        public int CompareTo(TreeNodeN<T> other)
-        {
-           return Value.CompareTo(other.Value);
-        }
     }
 }

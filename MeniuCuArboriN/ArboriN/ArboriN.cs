@@ -9,7 +9,7 @@ using System.Windows.Forms;
 
 namespace MeniuCuArboriN.ArboriN
 {
-    public class ArboriN<T> : IArboriN<T> where T : IComparable<T>
+    public class ArboriN<T> : IArboriN<T> where T : Button
     {
 
         private TreeNodeN<T> _root = null;
@@ -40,7 +40,7 @@ namespace MeniuCuArboriN.ArboriN
         {
             if(node != null)
             {
-                if(node.Value.CompareTo(value) == 1)
+                if(node.Value.Text == value.Text)
                 {
                     return node;
                 }
@@ -48,6 +48,27 @@ namespace MeniuCuArboriN.ArboriN
                 for(int i=0;i<node.Children.Count;i++)
                 {
                     return findByValue(node.Children[i], value);
+                }
+            }
+
+            return null;
+        }
+
+        public List<T> findByNode(TreeNodeN<T> node, TreeNodeN<T> parent)
+        {
+            if (node != null)
+            {
+                if (node == parent)
+                {
+                    List<T> list = new List<T>();
+                    for (int i = 0; i < parent.Children.Count; i++)
+                        list.Add(parent.Children[i].Value);
+                    return list;
+                }
+
+                for (int i = 0; i < node.Children.Count; i++)
+                {
+                    return findByNode(node.Children[i], parent);
                 }
             }
 
@@ -84,7 +105,7 @@ namespace MeniuCuArboriN.ArboriN
             {
                 for(int i=0;i<node.Children.Count;i++)
                 {
-                    if (node.Children[i].Value.CompareTo(value) == 1)
+                    if (node.Children[i].Value.Text == value.Text)
                     {
                         return node;
                     }
@@ -106,7 +127,7 @@ namespace MeniuCuArboriN.ArboriN
 
             for(int i = 0; i < parinte.Children.Count; i++)
             {
-                if (parinte.Children[i].Value.CompareTo(value) == 1)
+                if (parinte.Children[i].Value.Text == value.Text)
                 {
                     parinte.Children.RemoveAt(i);
                 }

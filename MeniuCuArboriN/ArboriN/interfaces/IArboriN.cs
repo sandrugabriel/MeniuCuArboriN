@@ -7,7 +7,7 @@ using System.Windows.Forms;
 
 namespace MeniuCuArboriN.ArboriN.interfaces
 {
-    public interface IArboriN<T> where T : IComparable<T>
+    public interface IArboriN<T> where T : Button
     {
 
         TreeNodeN<T> getNode();
