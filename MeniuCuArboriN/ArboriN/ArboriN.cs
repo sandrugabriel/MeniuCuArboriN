@@ -1,4 +1,5 @@
 ﻿using MeniuCuArboriN.ArboriN.interfaces;
+using MeniuCuArboriN.View.Panels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -40,15 +41,19 @@ namespace MeniuCuArboriN.ArboriN
         {
             if(node != null)
             {
-                if(node.Value.Text == value.Text)
+                if(node.Value == value)
                 {
                     return node;
                 }
 
                 for(int i=0;i<node.Children.Count;i++)
                 {
-                    return findByValue(node.Children[i], value);
+                    if (node.Children[i].Value == value) return node.Children[i];
+
+                    if(i >= node.Children.Count-1)
+                     return findByValue(node.Children[i], value);
                 }
+
             }
 
             return null;
@@ -136,7 +141,72 @@ namespace MeniuCuArboriN.ArboriN
         
         }
 
+        public TreeNodeN<T> findByValue1(TreeNodeN<T> node, T value)
+        {
+            if (node != null)
+            {
+                if (node.Value== value)
+                {
+                    return node;
+                }
 
+                for (int i = 0; i < node.Children.Count; i++)
+                {
+                    return findByValue1(node.Children[i], value);
+                }
+            }
+
+            return null;
+        }
+
+        public List<T> getTsByChildren(TreeNodeN<T> node)
+        {
+            List<T> ts = new List<T>();
+
+            if(node.Children != null)
+            for(int i=0;i<node.Children.Count;i++)
+            {
+                    ts.Add(node.Children[i].Value);
+            }
+
+            return ts;
+        }
+
+        public List<T> getTsByAllChildren(TreeNodeN<T> node)
+        {
+            List<T> ts = new List<T>();
+
+            if (node.Children != null)
+                for (int i = 0; i < node.Children.Count; i++)
+                {
+                    ts.Add(node.Children[i].Value);
+                    for(int k = 0; k < node.Children[i].Children.Count; k++)
+                    {
+                        ts.Add(node.Children[i].Children[k].Value);
+                    }
+                }
+
+            return ts;
+        }
+
+        public TreeNodeN<T> findNode(TreeNodeN<T> node, T btn)
+        {
+            if (node.Children != null)
+                for (int i = 0; i < node.Children.Count; i++)
+                {
+                    if (node.Children[i].Value == btn) return node.Children[i];
+                    else
+                        for (int k = 0; k < node.Children[i].Children.Count; k++)
+                        {
+                            if (node.Children[i].Children[k].Value == btn)
+                            {
+                                return node.Children[i].Children[k];
+                            }
+                        }
+                }
+
+            return null;
+        }
 
     }
 }
