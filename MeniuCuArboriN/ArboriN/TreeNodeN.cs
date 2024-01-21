@@ -14,6 +14,7 @@ namespace MeniuCuArboriN.ArboriN
 
         public T Value { get; set; }
 
+        public bool IsExpend { get; set; }
 
     }
 }

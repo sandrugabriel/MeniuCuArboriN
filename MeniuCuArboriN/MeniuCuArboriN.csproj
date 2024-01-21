@@ -228,7 +228,19 @@
     <Compile Include="View\Mockups\MockupMeniu.Designer.cs">
       <DependentUpon>MockupMeniu.cs</DependentUpon>
     </Compile>
+    <Compile Include="View\Mockups\MockupPnlCard.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="View\Mockups\MockupPnlCard.Designer.cs">
+      <DependentUpon>MockupPnlCard.cs</DependentUpon>
+    </Compile>
+    <Compile Include="View\Panels\PnlCard.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="View\Panels\PnlMeniu.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="View\Panels\PnlMeniu2.cs">
       <SubType>Component</SubType>
     </Compile>
     <EmbeddedResource Include="Form1.resx">
@@ -246,6 +258,9 @@
     </Compile>
     <EmbeddedResource Include="View\Mockups\MockupMeniu.resx">
       <DependentUpon>MockupMeniu.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="View\Mockups\MockupPnlCard.resx">
+      <DependentUpon>MockupPnlCard.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">

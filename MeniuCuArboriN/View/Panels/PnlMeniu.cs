@@ -38,8 +38,9 @@ namespace MeniuCuArboriN.View.Panels
         List<Button> buttonList;
 
         string tag;
-        public PnlMeniu(Form1 form1) {
-        
+        public PnlMeniu(Form1 form1)
+        {
+
             this.form = form1;
 
             listArbori = new List<ArboriN<Button>>();
@@ -89,7 +90,6 @@ namespace MeniuCuArboriN.View.Panels
 
             path = Application.StartupPath + @"/data/img/";
 
-            buttonList = new List<Button>() { btn1, btn2, btn3, btn4, btn5, btn6, btn7, btn8 };
 
             //btnimg1
             this.btnImg1.BackColor = System.Drawing.Color.SteelBlue;
@@ -227,8 +227,14 @@ namespace MeniuCuArboriN.View.Panels
             this.btn8.ImageAlign = System.Drawing.ContentAlignment.MiddleCenter;
             this.btn8.Name = "btn8";
 
-            this.btn1.Text = this.btn2.Text = this.btn3.Text = this.btn4.Text = this.btn5.Text = this.btn6.Text =
-                this.btn7.Text = this.btn8.Text = "Text";
+            this.btn1.Text = "btn1";
+            this.btn2.Text = "btn2";
+            this.btn3.Text = "btn3";
+            this.btn4.Text = "btn4";
+            this.btn5.Text = "btn5";
+            this.btn6.Text = "btn6";
+            this.btn7.Text = "btn7";
+            this.btn8.Text = "btn8";
 
             this.btn1.Visible = this.btn2.Visible = this.btn3.Visible = this.btn4.Visible = this.btn5.Visible = this.btn6.Visible =
                this.btn7.Visible = this.btn8.Visible = false;
@@ -245,14 +251,20 @@ namespace MeniuCuArboriN.View.Panels
             this.btn1.Tag = this.btn2.Tag = this.btn3.Tag = this.btn4.Tag = this.btn5.Tag = this.btn6.Tag =
                this.btn7.Tag = this.btn8.Tag = tag;
 
-            this.btnImg1.Tag = this.btnImg2.Tag = this.btnImg3.Tag = this.btnImg4.Tag = this.btnImg5.Tag = this.btnImg6.Tag =
-               this.btnImg7.Tag = this.btnImg8.Tag = tag;
+            this.btnImg1.Tag = btn1;
+            this.btnImg2.Tag = btn2;
+            this.btnImg3.Tag = btn3;
+            this.btnImg4.Tag = btn4;
+            this.btnImg5.Tag = btn5;
+            this.btnImg6.Tag = btn6;
+            this.btnImg7.Tag = btn7;
+            this.btnImg8.Tag = btn8;
 
             //MessageBox.Show(btn1.Tag.ToString());
 
             ArboriN<Button> arbor1 = new ArboriN<Button>();
             arbor1.Add(null, btn1);
-            arbor1.Add(btn1,btn2);
+            arbor1.Add(btn1, btn2);
             arbor1.Add(btn1, btn3);
             arbor1.Add(btn1, btn5);
             arbor1.Add(btn3, btn4);
@@ -260,7 +272,7 @@ namespace MeniuCuArboriN.View.Panels
             ArboriN<Button> arbor2 = new ArboriN<Button>();
             arbor2.Add(null, btn6);
 
-            ArboriN<Button> arbor3 = new ArboriN<Button>();    
+            ArboriN<Button> arbor3 = new ArboriN<Button>();
             arbor3.Add(null, btn7);
             arbor3.Add(btn7, btn8);
 
@@ -269,7 +281,9 @@ namespace MeniuCuArboriN.View.Panels
             listArbori.Add(arbor2);
             listArbori.Add(arbor3);
 
+            buttonList = new List<Button>() { btn1, btn2, btn3, btn4, btn5, btn6, btn7, btn8 };
 
+            //  MessageBox.Show(arbor1.getNode().Children[3].Value.Name.ToString());
             createMenu();
 
         }
@@ -277,7 +291,7 @@ namespace MeniuCuArboriN.View.Panels
         Button findByChild(Button button)
         {
 
-            for(int i=0;i<buttonList.Count;i++)
+            for (int i = 0; i < buttonList.Count; i++)
             {
                 if (buttonList[i].Controls[0] == button)
                 {
@@ -291,54 +305,109 @@ namespace MeniuCuArboriN.View.Panels
         public void btnsImg_Click(object sender, EventArgs e)
         {
 
-            Button btn = (Button)sender;
-            Button parent = findByChild(btn);
+            Button btn = (Button)((Button)sender).Tag;
+
+            //MessageBox.Show(btn.Name);
 
             if (btn.Tag.ToString().Equals("close"))
             {
 
-                
-
-
                 for (int i = 0; i < listArbori.Count; i++)
                 {
-                    if (listArbori[i].getNode().Value == parent)
+                    TreeNodeN<Button> node = new TreeNodeN<Button>();
+                    node = listArbori[i].findByValue(listArbori[i].getNode(), btn);
+                    if (node != null)
                     {
-                        TreeNodeN<Button> node = listArbori[i].findByValue(listArbori[i].getNode(), parent);
                         List<Button> list = new List<Button>();
-                        list = listArbori[i].findByNode(listArbori[i].getNode(), node);
-                        int s = parent.Location.Y;
-                        for (int k = 0; k < list.Count; k++)
+                        list = listArbori[i].getTsByChildren(node);
+
+                        list[0].Location = new Point(btn.Location.X + 40, btn.Location.Y + 67);
+                        list[0].Visible = true;
+                        for (int k = 1; k < list.Count; k++)
                         {
-                            s += 67;
-                            list[k].Location = new Point(parent.Location.X + 40, s);
+                            list[k].Location = new Point(btn.Location.X + 40, list[k - 1].Location.Y + 67);
                             list[k].Visible = true;
                         }
                     }
                 }
 
                 btn.Tag = "open";
+                /*
+                                buttonList[5].Visible = false;
+                                buttonList[6].Visible = false;*/
+               
+
             }
             else if (btn.Tag.ToString().Equals("open"))
             {
 
-            }
-          
+                for (int i = 0; i < listArbori.Count; i++)
+                {
 
-           // MessageBox.Show(parent.Name);
-        }
+                    TreeNodeN<Button> node = new TreeNodeN<Button>();
+                    node = listArbori[i].findByValue(listArbori[i].getNode(), btn);
+                    if (node != null)
+                    {
+                        List<Button> list = new List<Button>();
+                        list = listArbori[i].getTsByAllChildren(node);
+                        int s = btn.Location.Y;
+                        for (int k = 0; k < list.Count; k++)
+                        {
+                            /* s += 67;
+                             list[k].Location = new Point(btn.Location.X + 40, s);*/
+                            list[k].Visible = false;
+                        }
+                    }
+                }
+
+
+                btn.Tag = "close";
+            }
+
+            int ct = 9999;
+            Button button = btn;
+            for (int i = 0; i < buttonList.Count; i++)
+            {
+                if (btn == buttonList[i]) ct = i;
+
+                if (buttonList[i].Visible == true && i > ct)
+                {
+                    buttonList[i].Location = new Point(buttonList[i].Location.X, button.Location.Y + 67);
+                    button = buttonList[i];
+                }
+            }
+            // MessageBox.Show(parent.Name);
+        } 
 
         public void createMenu()
         {
-            int s=33;
-            for(int i=0;i<listArbori.Count;i++)
+            int s = 33;
+            for (int i = 0; i < listArbori.Count; i++)
             {
                 s += 67;
-                listArbori[i].getNode().Value.Location = new Point(0,s);
+                listArbori[i].getNode().Value.Location = new Point(0, s);
                 listArbori[i].getNode().Value.Visible = true;
+                if (listArbori[i].getNode().Children.Count == 0)
+                {
+                    listArbori[i].getNode().Value.Controls[0].Visible = false;
+                }
+
 
             }
 
+            for(int i = 1;i < buttonList.Count;i++)
+            {
+               // i = 3;
+                for(int k=0;k<listArbori.Count;k++) {
+
+                    TreeNodeN<Button> node = listArbori[k].findNode(listArbori[k].getNode(), buttonList[i]);
+                    if(node != null)
+                    {
+                       if(node.Children.Count == 0)
+                            node.Value.Controls[0].Visible = false;
+                    }
+                }
+            }
 
         }
 
