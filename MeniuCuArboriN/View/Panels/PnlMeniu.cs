@@ -1,6 +1,8 @@
-﻿using MeniuCuArboriN.ArboriN;
+﻿using Bunifu.UI.WinForms;
+using MeniuCuArboriN.ArboriN;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using System.Text;
@@ -31,13 +33,16 @@ namespace MeniuCuArboriN.View.Panels
         Button btnImg7;
         Button btnImg8;
 
-
         string path;
 
         List<ArboriN<Button>> listArbori;
         List<Button> buttonList;
 
         string tag;
+
+        BunifuTextBox txtSearch;
+        BunifuImageButton btnsearch;
+
         public PnlMeniu(Form1 form1)
         {
 
@@ -69,6 +74,8 @@ namespace MeniuCuArboriN.View.Panels
             this.btnImg6 = new Button();
             this.btnImg7 = new Button();
             this.btnImg8 = new Button();
+            this.txtSearch = new BunifuTextBox();
+            this.btnsearch = new BunifuImageButton();
 
             this.Controls.Add(btn1);
             this.Controls.Add(btn2);
@@ -78,6 +85,8 @@ namespace MeniuCuArboriN.View.Panels
             this.Controls.Add(btn6);
             this.Controls.Add(btn7);
             this.Controls.Add(btn8);
+            this.Controls.Add(txtSearch);
+            this.Controls.Add(btnsearch);
 
             this.btn1.Controls.Add(this.btnImg1);
             this.btn2.Controls.Add(this.btnImg2);
@@ -286,6 +295,130 @@ namespace MeniuCuArboriN.View.Panels
             //  MessageBox.Show(arbor1.getNode().Children[3].Value.Name.ToString());
             createMenu();
 
+            this.txtSearch.Location = new Point(12, 30);
+            this.txtSearch.Size = new Size(193, 43);
+            this.txtSearch.PlaceholderText = "Search";
+
+            this.btnsearch.Location = new Point(211, 30);
+            this.btnsearch.Size = new Size(40, 40);
+            this.btnsearch.Image = Image.FromFile(Application.StartupPath + @"/data/img/s.png");
+            this.btnsearch.Click += new EventHandler(btnSearch_Click);
+
+        }
+
+        public void invisibleAll()
+        {
+
+            for (int i = 1; i < buttonList.Count; i++)
+            {
+                buttonList[i].Visible = false;
+            }
+
+        }
+
+        public Button findBtn(string text)
+        {
+            for (int i = 0; i < buttonList.Count; i++)
+            {
+                if (buttonList[i].Text.Equals(text))
+                {
+                    return buttonList[i];
+                }
+            }
+            return null;
+        }
+
+        public void search(Button btn)
+        {
+
+            //MessageBox.Show(btn.Name);
+
+            if (btn.Tag.ToString().Equals("close"))
+            {
+                Button btnImg = (Button)btn.Controls[0];
+                btnImg.Image = Image.FromFile(Application.StartupPath + @"/data/img/down.png");
+                for (int i = 0; i < listArbori.Count; i++)
+                {
+                    TreeNodeN<Button> node = new TreeNodeN<Button>();
+                    node = listArbori[i].findByValue(listArbori[i].getNode(), btn);
+                    if (node != null)
+                    {
+                        List<Button> list = new List<Button>();
+                        list = listArbori[i].getTsByChildren(node);
+
+                        list[0].Location = new Point(btn.Location.X + 40, btn.Location.Y + 67);
+                        list[0].Visible = true;
+                        for (int k = 1; k < list.Count; k++)
+                        {
+                            list[k].Location = new Point(btn.Location.X + 40, list[k - 1].Location.Y + 67);
+                            list[k].Visible = true;
+                        }
+                    }
+                }
+
+                btn.Tag = "open";
+
+
+            }
+        }
+        public void btnSearch_Click(object sender, EventArgs e)
+        {
+
+            if (txtSearch.Text.Equals(""))
+            {
+                txtSearch.BorderColorIdle = Color.Red;
+            }
+            else
+            {
+                txtSearch.BorderColorIdle = Color.Silver;
+
+                invisibleAll();
+                createMenu();
+
+                Button btn = findBtn(txtSearch.Text);
+                btn.Visible = true;
+                btn.BackColor = Color.CornflowerBlue;
+                if (btn != null)
+                {
+                    List<TreeNodeN<Button>> btns = new List<TreeNodeN<Button>>();
+                    for (int i = 0; i < listArbori.Count; i++)
+                    {
+                        if (listArbori[i].findNode(listArbori[i].getNode(), btn) != null)
+                        {
+                            btns = listArbori[i].FindNodePath(listArbori[i].getNode(), btn);
+
+                            for (int j = 0; j < btns.Count; j++)
+                            {
+                                if (btns[j].Children != null)
+                                    if (btns[j].Children.Count > 0)
+                                        search(btns[j].Value);
+                                btns[j].Value.Visible = true;
+                            }
+                        }
+
+                    }
+
+
+
+                    int ct = 9999;
+                    Button button = buttonList[0];
+                    for (int i = 1; i < buttonList.Count; i++)
+                    {
+                        if (buttonList[i].Visible == true )
+                        {
+                            buttonList[i].Location = new Point(buttonList[i].Location.X, button.Location.Y + 67);
+                            button = buttonList[i];
+                        }
+                    }
+                }
+                else
+                {
+                    MessageBox.Show("Not found!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+
+            }
+
+
         }
 
         Button findByChild(Button button)
@@ -311,7 +444,8 @@ namespace MeniuCuArboriN.View.Panels
 
             if (btn.Tag.ToString().Equals("close"))
             {
-
+                Button btnImg = (Button)btn.Controls[0];
+                btnImg.Image = Image.FromFile(Application.StartupPath + @"/data/img/down.png");
                 for (int i = 0; i < listArbori.Count; i++)
                 {
                     TreeNodeN<Button> node = new TreeNodeN<Button>();
@@ -335,12 +469,14 @@ namespace MeniuCuArboriN.View.Panels
                 /*
                                 buttonList[5].Visible = false;
                                 buttonList[6].Visible = false;*/
-               
+
 
             }
             else if (btn.Tag.ToString().Equals("open"))
             {
 
+                Button btnImg = (Button)btn.Controls[0];
+                btnImg.Image = Image.FromFile(Application.StartupPath + @"/data/img/right.png");
                 for (int i = 0; i < listArbori.Count; i++)
                 {
 
@@ -377,7 +513,7 @@ namespace MeniuCuArboriN.View.Panels
                 }
             }
             // MessageBox.Show(parent.Name);
-        } 
+        }
 
         public void createMenu()
         {
@@ -387,6 +523,8 @@ namespace MeniuCuArboriN.View.Panels
                 s += 67;
                 listArbori[i].getNode().Value.Location = new Point(0, s);
                 listArbori[i].getNode().Value.Visible = true;
+                listArbori[i].getNode().Value.BackColor = System.Drawing.Color.LightSkyBlue;
+
                 if (listArbori[i].getNode().Children.Count == 0)
                 {
                     listArbori[i].getNode().Value.Controls[0].Visible = false;
@@ -395,15 +533,18 @@ namespace MeniuCuArboriN.View.Panels
 
             }
 
-            for(int i = 1;i < buttonList.Count;i++)
+            for (int i = 1; i < buttonList.Count; i++)
             {
-               // i = 3;
-                for(int k=0;k<listArbori.Count;k++) {
+                buttonList[i].BackColor = System.Drawing.Color.LightSkyBlue;
+
+                // i = 3;
+                for (int k = 0; k < listArbori.Count; k++)
+                {
 
                     TreeNodeN<Button> node = listArbori[k].findNode(listArbori[k].getNode(), buttonList[i]);
-                    if(node != null)
+                    if (node != null)
                     {
-                       if(node.Children.Count == 0)
+                        if (node.Children.Count == 0)
                             node.Value.Controls[0].Visible = false;
                     }
                 }
