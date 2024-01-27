@@ -208,5 +208,43 @@ namespace MeniuCuArboriN.ArboriN
             return null;
         }
 
+        public List<TreeNodeN<T>> FindNodePath(TreeNodeN<T> root,T targetValue)
+        {
+            List<TreeNodeN<T>> path = new List<TreeNodeN<T>>();
+            FindNodePathHelper(root, targetValue, path);
+            return path;
+        }
+
+        static void FindNodePathHelper(TreeNodeN<T> currentNode, T targetValue, List<TreeNodeN<T>> path)
+        {
+            if (currentNode == null)
+            {
+                return;
+            }
+
+            path.Add(currentNode);
+
+            if (currentNode.Value == targetValue)
+            {
+                return;
+            }
+
+            path.AddRange(currentNode.Children);
+            foreach (var child in currentNode.Children)
+            {
+                if (child.Value == targetValue)
+                {
+                    return;
+                }
+            }
+
+            foreach (var child in currentNode.Children)
+            {
+                FindNodePathHelper(child, targetValue, path);
+            }
+
+            return;
+        }
+
     }
 }
